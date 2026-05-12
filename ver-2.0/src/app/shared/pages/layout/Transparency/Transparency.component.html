@@ -1,0 +1,171 @@
+<div class="page">
+  <div style="margin-bottom: 1.25rem">
+    <h2
+      style="
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      "
+    >
+      {{ expensesOnly ? "Gastos" : "Transparência" }}
+    </h2>
+    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted)">
+      {{
+        expensesOnly
+          ? "Histórico de despesas"
+          : "Visão pública das movimentações"
+      }}
+    </p>
+  </div>
+
+  <!-- Resumo financeiro -->
+  <div *ngIf="!expensesOnly" class="stat-grid-4" style="margin-bottom: 1.25rem">
+    <div class="stat-card">
+      <div
+        style="
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        "
+      >
+        Entradas
+      </div>
+      <div style="font-size: 1.3rem; font-weight: 800; color: #059669">
+        {{ fmtVal(totals?.in) }}
+      </div>
+    </div>
+    <div class="stat-card">
+      <div
+        style="
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        "
+      >
+        Saídas
+      </div>
+      <div style="font-size: 1.3rem; font-weight: 800; color: #ef4444">
+        {{ fmtVal(totals?.out) }}
+      </div>
+    </div>
+    <div class="stat-card">
+      <div
+        style="
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        "
+      >
+        Saldo
+      </div>
+      <div
+        style="font-size: 1.3rem; font-weight: 800"
+        [style.color]="(totals?.balance || 0) >= 0 ? '#059669' : '#ef4444'"
+      >
+        {{ fmtVal(totals?.balance) }}
+      </div>
+    </div>
+    <div class="stat-card">
+      <div
+        style="
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+        "
+      >
+        Doações
+      </div>
+      <div style="font-size: 1.3rem; font-weight: 800; color: #ec4899">
+        {{ fmtVal(totals?.donations) }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista despesas -->
+  <div class="card">
+    <h3 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 600">
+      Despesas registradas
+    </h3>
+    <p
+      *ngIf="expenses.length === 0"
+      style="color: var(--text-muted); font-size: 0.875rem"
+    >
+      Nenhuma despesa registrada.
+    </p>
+    <div
+      *ngFor="let tx of expenses"
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0.65rem 0;
+        border-bottom: 1px solid var(--border);
+      "
+    >
+      <div>
+        <div
+          style="
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+          "
+        >
+          {{ tx.desc || tx.name || "—" }}
+        </div>
+        <div style="font-size: 0.75rem; color: var(--text-muted)">
+          {{ fmtD(tx.date) }} · {{ tx.category || "Outros" }}
+        </div>
+        <div *ngIf="tx.nfUrl" style="margin-top: 0.2rem">
+          <a
+            [href]="tx.nfUrl"
+            target="_blank"
+            style="font-size: 0.7rem; color: var(--primary)"
+            >🔗 Ver comprovante</a
+          >
+        </div>
+      </div>
+      <div
+        style="
+          font-weight: 700;
+          color: #ef4444;
+          font-size: 0.9rem;
+          white-space: nowrap;
+        "
+      >
+        -{{ fmtVal(tx.value) }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Categorias -->
+  <div *ngIf="categories.length > 0" class="card" style="margin-top: 1rem">
+    <h3 style="margin: 0 0 1rem; font-size: 0.95rem; font-weight: 600">
+      Por categoria
+    </h3>
+    <div
+      *ngFor="let cat of categories; let i = index"
+      style="margin-bottom: 0.75rem"
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.25rem;
+        "
+      >
+        <span style="font-size: 0.8rem; font-weight: 500">{{ cat[0] }}</span>
+        <span style="font-size: 0.8rem; color: var(--text-muted)"
+          >{{ fmtVal(cat[1]) }} ({{ pct(cat[1]) }}%)</span
+        >
+      </div>
+      <div class="progress-bar-bg">
+        <div
+          class="progress-bar"
+          [style.width]="pct(cat[1]) + '%'"
+          [style.background]="colors[i % colors.length]"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

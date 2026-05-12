@@ -1,0 +1,103 @@
+<div class="page">
+  <div style="margin-bottom: 1.25rem">
+    <h2
+      style="
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      "
+    >
+      Registrar Doação
+    </h2>
+    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted)">
+      Contribuição voluntária
+    </p>
+  </div>
+  <div class="card" style="max-width: 500px">
+    <form
+      (ngSubmit)="submit()"
+      style="display: flex; flex-direction: column; gap: 1rem"
+    >
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem;
+          background: var(--primary-light);
+          border-radius: var(--radius-sm);
+        "
+      >
+        <input
+          type="checkbox"
+          id="anon"
+          [(ngModel)]="anon"
+          name="anon"
+          style="width: 16px; height: 16px; accent-color: var(--primary)"
+        />
+        <label
+          for="anon"
+          style="
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+          "
+          >Doação anônima</label
+        >
+      </div>
+      <div *ngIf="!anon">
+        <label class="form-label">Nome do doador *</label>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="Nome completo"
+          [(ngModel)]="form.name"
+          name="name"
+        />
+      </div>
+      <div>
+        <label class="form-label">Valor (R$) *</label>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="0,00"
+          [value]="maskedValue"
+          (input)="onValueInput($event)"
+          name="value"
+          inputmode="numeric"
+        />
+      </div>
+      <div>
+        <label class="form-label">Data</label>
+        <input
+          class="form-input"
+          type="date"
+          [(ngModel)]="form.date"
+          name="date"
+        />
+      </div>
+      <div>
+        <label class="form-label">Mensagem (opcional)</label>
+        <textarea
+          class="form-input"
+          rows="2"
+          [(ngModel)]="form.desc"
+          name="desc"
+          style="resize: vertical"
+        ></textarea>
+      </div>
+      <p *ngIf="error" style="color: #dc2626; font-size: 0.85rem; margin: 0">
+        {{ error }}
+      </p>
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="loading"
+        style="width: 100%; justify-content: center; display: flex"
+      >
+        {{ loading ? "Salvando..." : "❤️ Registrar Doação" }}
+      </button>
+    </form>
+  </div>
+</div>

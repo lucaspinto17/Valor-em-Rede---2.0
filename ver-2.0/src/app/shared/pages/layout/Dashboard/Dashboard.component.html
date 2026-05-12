@@ -1,0 +1,92 @@
+<div class="page">
+      <div style="margin-bottom:1.25rem">
+        <h2 style="margin:0;font-size:1.1rem;font-weight:700;color:var(--text-primary)">Painel Financeiro</h2>
+        <p style="margin:0;font-size:.85rem;color:var(--text-muted)">Visão geral da associação</p>
+      </div>
+
+      <div class="stat-grid-4" style="margin-bottom:1.25rem">
+        <div class="stat-card">
+          <div style="background:#05966918;border-radius:10px;padding:.5rem;display:inline-flex">
+            <span style="font-size:1.25rem">📈</span>
+          </div>
+          <div style="margin-top:.75rem">
+            <div style="font-size:1.5rem;font-weight:800;color:var(--text-primary)">{{fmtVal(totals?.in)}}</div>
+            <div style="font-size:.8rem;color:var(--text-muted)">Total recebido</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div style="background:#ef444418;border-radius:10px;padding:.5rem;display:inline-flex">
+            <span style="font-size:1.25rem">📉</span>
+          </div>
+          <div style="margin-top:.75rem">
+            <div style="font-size:1.5rem;font-weight:800;color:var(--text-primary)">{{fmtVal(totals?.out)}}</div>
+            <div style="font-size:.8rem;color:var(--text-muted)">Total gasto</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div [style.background]="(totals?.balance||0)>=0?'#3b82f618':'#f59e0b18'" style="border-radius:10px;padding:.5rem;display:inline-flex">
+            <span style="font-size:1.25rem">💰</span>
+          </div>
+          <div style="margin-top:.75rem">
+            <div style="font-size:1.5rem;font-weight:800" [style.color]="(totals?.balance||0)>=0?'#059669':'#ef4444'">{{fmtVal(totals?.balance)}}</div>
+            <div style="font-size:.8rem;color:var(--text-muted)">Saldo atual</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div style="background:#ec489918;border-radius:10px;padding:.5rem;display:inline-flex">
+            <span style="font-size:1.25rem">❤️</span>
+          </div>
+          <div style="margin-top:.75rem">
+            <div style="font-size:1.5rem;font-weight:800;color:var(--text-primary)">{{fmtVal(totals?.donations)}}</div>
+            <div style="font-size:.8rem;color:var(--text-muted)">Doações</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <!-- Categorias -->
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
+            <span>📊</span>
+            <span style="font-weight:600;font-size:.9rem">Gastos por categoria</span>
+          </div>
+          <p *ngIf="categories.length===0" style="color:var(--text-muted);font-size:.85rem">Nenhuma despesa registrada.</p>
+          <div *ngFor="let cat of categories; let i=index" style="margin-bottom:.75rem">
+            <div style="display:flex;justify-content:space-between;margin-bottom:.25rem">
+              <span style="font-size:.8rem;color:var(--text-secondary);font-weight:500">{{cat[0]}}</span>
+              <span style="font-size:.8rem;color:var(--text-muted)">{{fmtVal(cat[1])}} <span style="font-size:.7rem">({{pct(cat[1])}}%)</span></span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar" [style.width]="pct(cat[1])+'%'" [style.background]="catColors[i%catColors.length]"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membros -->
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
+            <span>👥</span>
+            <span style="font-weight:600;font-size:.9rem">Membros em dia</span>
+          </div>
+          <p *ngIf="!memberStats||memberStats.total===0" style="color:var(--text-muted);font-size:.85rem">Nenhum pagamento registrado.</p>
+          <ng-container *ngIf="memberStats&&memberStats.total>0">
+            <div style="font-size:2rem;font-weight:800;color:var(--primary);text-align:center;margin:.5rem 0">
+              {{memberStats.paid}}<span style="font-size:1rem;color:var(--text-muted);font-weight:400">/{{memberStats.total}}</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar" [style.width]="(memberStats.paid/memberStats.total*100)+'%'"></div>
+            </div>
+            <p style="font-size:.8rem;color:var(--text-muted);margin-top:.5rem;text-align:center">
+              {{memberStats.paid}} pagaram este mês
+            </p>
+            <div style="margin-top:.75rem;display:flex;flex-direction:column;gap:.4rem;max-height:160px;overflow-y:auto">
+              <div *ngFor="let m of memberStats.list"
+                style="display:flex;justify-content:space-between;align-items:center;font-size:.8rem;padding:.3rem .5rem;border-radius:6px;background:var(--surface-alt)">
+                <span style="font-weight:500;color:var(--text-primary)">{{m.name}}</span>
+                <span style="color:#059669;font-weight:600">{{fmtVal(m.total)}}</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,107 @@
+<div class="page">
+  <div style="margin-bottom: 1.25rem">
+    <h2
+      style="
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      "
+    >
+      Histórico
+    </h2>
+    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted)">
+      {{ filtered.length }} registros encontrados
+    </p>
+  </div>
+
+  <div class="card" style="margin-bottom: 1rem">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+      <input
+        class="form-input"
+        type="text"
+        placeholder="Buscar..."
+        style="flex: 1; min-width: 180px"
+        [(ngModel)]="search"
+      />
+      <select class="form-input" style="width: 150px" [(ngModel)]="typeFilter">
+        <option value="">Todos os tipos</option>
+        <option value="payment">Pagamentos</option>
+        <option value="donation">Doações</option>
+        <option value="expense">Despesas</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <p
+      *ngIf="filtered.length === 0"
+      style="
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        text-align: center;
+        padding: 2rem 0;
+      "
+    >
+      Nenhum registro encontrado.
+    </p>
+    <div
+      *ngFor="let tx of filtered"
+      class="history-row"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.65rem 0.5rem;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 0.15s;
+      "
+      (click)="showReceipt.emit(tx)"
+    >
+      <div style="display: flex; align-items: center; gap: 0.75rem">
+        <div
+          style="
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+          "
+          [style.background]="typeColor(tx.type) + '18'"
+        >
+          {{ typeEmoji(tx.type) }}
+        </div>
+        <div>
+          <div
+            style="
+              font-weight: 600;
+              font-size: 0.875rem;
+              color: var(--text-primary);
+            "
+          >
+            {{ tx.name || tx.desc || "—" }}
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-muted)">
+            {{ fmtD(tx.createdAt || tx.date) }}
+            {{ tx.category ? "· " + tx.category : "" }}
+          </div>
+        </div>
+      </div>
+      <div style="text-align: right">
+        <div
+          style="font-weight: 700; font-size: 0.9rem"
+          [style.color]="typeColor(tx.type)"
+        >
+          {{ tx.type === "expense" ? "-" : "+" }}{{ fmtVal(tx.value) }}
+        </div>
+        <div style="font-size: 0.7rem; color: var(--text-muted)">
+          {{ typeLabel(tx.type) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

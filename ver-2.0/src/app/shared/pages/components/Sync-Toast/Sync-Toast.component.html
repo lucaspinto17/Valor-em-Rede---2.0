@@ -1,0 +1,26 @@
+<div
+  *ngIf="toast"
+  class="sync-toast"
+  [style.background]="bgColor"
+  style="
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.65rem 1.25rem;
+    border-radius: 99px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    animation: fadeIn 0.2s ease;
+  "
+>
+  <span *ngIf="toast.type === 'syncing'">⏳</span>
+  <span *ngIf="toast.type === 'success'">✅</span>
+  <span *ngIf="toast.type === 'error'">❌</span>
+  <span *ngIf="toast.type === 'info'">ℹ️</span>
+  {{ toast.msg }}
+</div>

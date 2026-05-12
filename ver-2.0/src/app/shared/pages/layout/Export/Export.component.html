@@ -1,0 +1,68 @@
+<div class="page">
+  <div style="margin-bottom: 1.25rem">
+    <h2
+      style="
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      "
+    >
+      Exportar Dados
+    </h2>
+    <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted)">
+      Exporte relatórios e transações
+    </p>
+  </div>
+
+  <div style="display: grid; gap: 1rem; max-width: 500px">
+    <div class="card">
+      <h3 style="margin: 0 0 0.5rem; font-size: 0.95rem; font-weight: 600">
+        Exportar CSV
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 1rem">
+        Baixe todas as transações em formato CSV para planilhas.
+      </p>
+      <button
+        class="btn btn-primary"
+        (click)="exportCSV()"
+        style="width: 100%; justify-content: center; display: flex"
+      >
+        Baixar CSV
+      </button>
+    </div>
+
+    <div class="card">
+      <h3 style="margin: 0 0 0.5rem; font-size: 0.95rem; font-weight: 600">
+        Resumo Financeiro
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 1rem">
+        Exporte um resumo completo em texto.
+      </p>
+      <button
+        class="btn btn-secondary"
+        (click)="exportSummary()"
+        style="width: 100%; justify-content: center; display: flex"
+      >
+        Copiar Resumo
+      </button>
+    </div>
+
+    <div
+      *ngIf="copySuccess"
+      class="card"
+      style="background: #d1fae5; border: 1px solid #a7f3d0"
+    >
+      <p
+        style="
+          color: #065f46;
+          margin: 0;
+          font-size: 0.875rem;
+          text-align: center;
+        "
+      >
+        Copiado para a área de transferência!
+      </p>
+    </div>
+  </div>
+</div>
